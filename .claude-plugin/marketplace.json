@@ -1,0 +1,14 @@
+{
+  "name": "claude-refine",
+  "owner": {
+    "name": "carlosas",
+    "url": "https://github.com/carlosas"
+  },
+  "plugins": [
+    {
+      "name": "refine",
+      "source": "./",
+      "description": "Converts a rough feature idea into a refined-requirement.md product spec"
+    }
+  ]
+}
