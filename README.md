@@ -65,6 +65,12 @@ claude-refine/
 └── README.md
 ```
 
+## Inspiration
+
+- [Structured-Prompt-Driven Development (SPDD)](https://martinfowler.com/articles/structured-prompt-driven/)
+- [github/spec-kit](https://github.com/github/spec-kit)
+- [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec/)
+
 ## Editing guidance
 
 - Most changes are prompt-engineering on `SKILL.md`. Treat the description, phase rules, output template, and quality checklist as the four load-bearing parts — do not loosen the constraints (e.g., the 10-question cap, the "observations not prescriptions" rule for Codebase Context) without explicit reason.
