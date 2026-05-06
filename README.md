@@ -1,6 +1,6 @@
-# claude-refine
+# Claude-Refine
 
-A Claude Code plugin (`claude-refine`) that converts a rough feature idea into a `.draft-requirement.md` product spec, then chains into a follow-up post-processing step. Distribution via the Claude Code plugin marketplace.
+A Claude Code plugin that converts a rough feature idea into a refined product spec. Distribution via the Claude Code plugin marketplace.
 
 ## Installation
 
@@ -19,7 +19,7 @@ A Claude Code plugin (`claude-refine`) that converts a rough feature idea into a
 
 ## Output
 
-`/refine` writes `.claude-refine/.draft-requirement.md` inside your project. The directory is created automatically by a `UserPromptExpansion` hook on first use. The file is rewritten on every run — no stale state from previous features.
+`/refine` writes a refined feature specification inside a `.claude-refine/` folder in your project.
 
 **Structure:**
 - **Problem Statement**: the problem, not the solution
@@ -31,29 +31,14 @@ A Claude Code plugin (`claude-refine`) that converts a rough feature idea into a
 - **Assumptions**: decisions made with rationale
 - **Open Questions**: anything still unresolved
 
-## Workflow
-
-The skill defines a strict three-phase workflow:
-
-1. **Phase 0 — Codebase scan**: targeted `Glob`/`Grep` based on 3-5 extracted concepts; reads signatures only, never full implementations. Silently skipped (and the output section omitted) if no relevant code exists.
-2. **Phase 1 — Gap analysis**: scores 6 fixed taxonomy categories (Problem & Goal, Target User, Core Functionality, Scope Boundaries, Success Criteria, Edge Cases & Constraints) as Clear/Partial/Missing, then emits up to **8** `[NEEDS CLARIFICATION]` markers prioritized Scope > Target User > Success Criteria > Edge Cases. Low-impact gaps must become Assumptions, not questions.
-3. **Phase 2 — Guided Q&A**: questions are asked via the native `AskUserQuestion` tool. ≤4 markers → one round; 5–8 markers → two rounds (max), highest-priority batch first. Never the manual lettered-option chat format.
-
-## Post-Draft chaining
-
-Once `/refine` finishes and `.claude-refine/.draft-requirement.md` is freshly written (mtime within 60 seconds), a `Stop` hook injects a follow-up instruction that invokes the `claude-refine:-internal-post-draft` skill.
-
-The mtime check is what triggers chaining: no sentinel files, no stale-flag risk if the user interrupts mid-refinement.
-
 ## What it does
 
 `/refine` acts as a senior PM reviewing your feature request:
 
 1. **Scans your codebase** for relevant existing code (entities, services, patterns, auth mechanisms) to ground the refinement in project reality
 2. **Identifies gaps** in your feature description using a product taxonomy (problem, target user, scope, success criteria, edge cases)
-3. **Asks targeted questions** via `AskUserQuestion`, only the ones that actually matter
-4. **Writes `.claude-refine/.draft-requirement.md`**, a clean, unambiguous product spec ready to hand to `/plan` or any implementation tool
-5. **Chains into post-draft** automatically via the Stop hook
+3. **Asks targeted questions** to the user, only the ones that actually matter
+4. **Writes a spec markdown file**, a clean, unambiguous product spec ready to hand to `/plan` or any other implementation tool
 
 ## Plugin structure
 
@@ -86,3 +71,12 @@ claude-refine/
 - Section order and headings are fixed (Problem Statement → Target User → Core Functionality → Out of Scope → Success Criteria → Codebase Context → Assumptions → Open Questions). Downstream tools like `/plan` consume this structure.
 - Problem/Target User/Core Functionality/Out of Scope/Success Criteria sections must contain **no technology choices or implementation details**. Codebase Context is observations only, never prescriptions. The skill enforces this via a quality checklist that runs before save.
 - Hook commands in `hooks/hooks.json` must stay POSIX-portable (macOS + Linux). The mtime read uses `stat -f %m` with a `stat -c %Y` fallback for exactly this reason.
+- Questions are asked via the native `AskUserQuestion` tool. ≤4 markers → one round; 5–8 markers → two rounds (max). Never the manual lettered-option chat format.
+- Once `/refine` finishes and `.claude-refine/.draft-requirement.md` is written (mtime within 60 seconds), a `Stop` hook injects a follow-up instruction that invokes the `claude-refine:-internal-post-draft` skill. No sentinel files, no stale-flag risk if the user interrupts mid-refinement.
+
+Strict workflow:
+
+- **Phase 0 — Codebase scan**: targeted `Glob`/`Grep` based on 3-5 extracted concepts; reads signatures only, never full implementations. Silently skipped (and the output section omitted) if no relevant code exists.
+- **Phase 1 — Gap analysis**: scores 6 fixed taxonomy categories (Problem & Goal, Target User, Core Functionality, Scope Boundaries, Success Criteria, Edge Cases & Constraints) as Clear/Partial/Missing, then emits up to **8** `[NEEDS CLARIFICATION]` markers prioritized Scope > Target User > Success Criteria > Edge Cases. Low-impact gaps must become Assumptions, not questions.
+- **Phase 2 — Guided Q&A**: questions are asked to the user. One or two rounds, highest-priority batch first.
+- **Phase 3 — Spec file production**: a clean, unambiguous product spec ready to hand to `/plan` or any other implementation tool
