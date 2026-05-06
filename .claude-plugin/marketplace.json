@@ -8,7 +8,7 @@
     {
       "name": "refine",
       "source": "./",
-      "description": "Converts a rough feature idea into a refined-requirement.md product spec"
+      "description": "Converts a rough feature idea into a refined product spec"
     }
   ]
 }
