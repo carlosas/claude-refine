@@ -60,6 +60,7 @@ Constraints:
 - Hook commands in `hooks/hooks.json` must stay POSIX-portable (macOS + Linux). The mtime read uses `stat -f %m` with a `stat -c %Y` fallback for exactly this reason.
 - Questions are asked via the native `AskUserQuestion` tool. ≤4 markers → one round; 5–8 markers → two rounds (max). Never the manual lettered-option chat format.
 - Once `/refine` finishes and `.claude-refine/.draft-requirement.md` is written (mtime within 60 seconds), a `Stop` hook injects a follow-up instruction that invokes the `claude-refine:-internal-post-draft` skill. No sentinel files, no stale-flag risk if the user interrupts mid-refinement.
+- After the user approves a plan (`ExitPlanMode`), a `PostToolUse` hook (`hooks/post-plan.sh`) checks the most-recently-modified `~/.claude/plans/*.md` for references to a `.claude-refine/<file>.md` spec. With exactly one reference, it injects an instruction that invokes the `claude-refine:-internal-post-plan` skill, which appends a dated subsection under `## Updates After Planning` in the spec — capturing contradictions to refined content and new product-level decisions made during planning. With zero references the hook is silent; with multiple references it asks Claude to surface a one-line note and skips, to avoid guessing the target spec.
 
 Workflow:
 
