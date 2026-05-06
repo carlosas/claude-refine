@@ -1,13 +1,13 @@
 ---
 name: refine
-description: "Refine a feature request from a product perspective before implementation. Scans the codebase for relevant context, identifies gaps, and produces a refined-requirement.md. Use when: planning a new feature, clarifying requirements, writing a product spec. Triggers on: /refine, 'refine this feature', 'help me define this', 'clarify this requirement', 'I want to build', 'product spec for'."
+description: "Refine a feature request from a product perspective before implementation. Scans the codebase for relevant context, identifies gaps, and produces a .refined-draft.md. Use when: planning a new feature, clarifying requirements, writing a product spec. Triggers on: /refine, 'refine this feature', 'help me define this', 'clarify this requirement', 'I want to build', 'product spec for'."
 ---
 
 # Feature Refinement
 
 Turn a rough feature idea into a clear, unambiguous product requirement — before any code is written.
 
-You are acting as a senior product manager. Your goal is to produce a `refined-requirement.md` that any engineer or AI agent can use as input for `/plan`, without ambiguity about what to build, for whom, and why.
+You are acting as a senior product manager. Your goal is to produce a `$PROJECT_DIR/.claude-refine/.draft-requirement.md` that any engineer or AI agent can use as input for `/plan`, without ambiguity about what to build, for whom, and why.
 
 You work in three phases:
 
@@ -59,7 +59,7 @@ Analyze the feature description against this product taxonomy. Score each catego
 For each **Partial** or **Missing** category that is decision-critical, mark it as `[NEEDS CLARIFICATION: specific question]`.
 
 **Rules:**
-- Maximum **10** clarification markers total — but only ask what genuinely needs an answer. A well-described feature may need 2-3 questions; a vague one may need 8-10. Do not pad to reach 10.
+- Maximum **8** clarification markers total — but only ask what genuinely needs an answer. A well-described feature may need 2-3 questions; a vague one may need 6-8. Do not pad to reach 8.
 - Prioritize by impact: Scope > Target User > Success Criteria > Edge Cases
 - For low-impact gaps: make an informed default assumption and document it in Assumptions instead of asking
 - Use codebase scan findings to make questions specific. Instead of "which auth method?" ask "The project uses tenant-scoped JWT — should this feature require tenant authentication, or is it public?"
@@ -68,36 +68,32 @@ For each **Partial** or **Missing** category that is decision-critical, mark it 
 
 ## Phase 2: Guided Q&A
 
-For each `[NEEDS CLARIFICATION]` marker, present a focused question.
+Ask the clarification questions using the `AskUserQuestion` tool — never the manual "A / B / C / D" letter format in chat text.
 
-**Format for each question:**
+**Batching rules:**
 
-```
-**Q[N]: [Topic]**
+- `AskUserQuestion` accepts **1–4 questions per call**.
+- If you have ≤4 markers: ask them all in **one round**.
+- If you have 5–8 markers: split into **two rounds** of up to 4 questions each. Send the highest-priority batch first (Scope > Target User > Success Criteria > Edge Cases). Wait for answers, then send the second batch — informed by the first round's answers (drop or rewrite questions that became obsolete).
+- Never exceed 2 rounds.
 
-Context: "[relevant quote from the feature description]"
+**Per-question requirements:**
 
-[The question]
+- `header`: ≤12 chars, topic chip (e.g. "Auth", "Scope", "Trigger").
+- `question`: one clear sentence ending with "?". Reference the relevant feature quote inline if it adds clarity.
+- `options`: 2–4 mutually exclusive choices. Do **not** add an "Other" option — the tool adds it automatically. If you have a recommended option, list it first and append "(Recommended)" to the label.
+- Each option needs a `description` explaining the implication of choosing it.
+- Set `multiSelect: true` only when choices are genuinely non-exclusive (e.g. "which surfaces should this appear on?").
 
-A. [Most common option]
-B. [Second option]
-C. [Third option if needed]
-D. Other: [describe your answer]
-```
-
-Present **all questions together** before waiting for answers.
-
-Users can reply with just the letter(s) — "A", "1A 2C 3B", "Q1: B, Q2: Other - [details]" — or free text.
-
-Once all answers are received, incorporate them and proceed to output.
+Once all answers are received across all rounds, incorporate them and proceed to output.
 
 ---
 
 ## Output
 
-**Step 1:** Check if `refined-requirement.md` exists. If it does, delete it.
+**Step 1:** Check if `$PROJECT_DIR/.claude-refine/.draft-requirement.md` exists. If it does, delete it.
 
-**Step 2:** Write `refined-requirement.md` with this exact structure:
+**Step 2:** Write `$PROJECT_DIR/.claude-refine/.draft-requirement.md` with this exact structure:
 
 ```markdown
 # Refined Feature: [2-4 word descriptive name]
@@ -181,6 +177,6 @@ If any item fails, fix the output before saving.
 ## After saving
 
 Confirm to the user:
-- `refined-requirement.md` has been written
-- One sentence summarising the refined feature
-- Suggest next step: "Run `/plan` (or your implementation tool of choice) using `refined-requirement.md` as input."
+- `.claude-refine/.draft-requirement.md` has been written
+- One sentence summarizing the refined feature
+- Suggest next step: "Run `/plan` (or your implementation tool of choice) using `.claude-refine/.draft-requirement.md` as input."
