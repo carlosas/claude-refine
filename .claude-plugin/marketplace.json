@@ -6,7 +6,7 @@
   },
   "plugins": [
     {
-      "name": "refine",
+      "name": "claude-refine",
       "source": "./",
       "description": "Converts a rough feature idea into a refined product spec"
     }
