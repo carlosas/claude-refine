@@ -1,6 +1,6 @@
 ---
 name: refine
-description: "Refine a feature request from a product perspective before implementation. Scans the codebase for relevant context, identifies gaps, and produces product requirement file. Use when: planning a new feature, clarifying requirements, writing a product spec. Triggers on: /refine."
+description: "Refine a feature request from a product perspective before implementation. Scans the codebase for relevant context, identifies gaps, and produces a product requirement file. Use when: planning a new feature, clarifying requirements, writing a product spec. Triggers on: /refine."
 ---
 
 # Feature Refinement
