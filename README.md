@@ -40,30 +40,17 @@ A Claude Code plugin that converts a rough feature idea into a refined product s
 3. **Asks targeted questions** to the user, only the ones that actually matter
 4. **Writes a spec markdown file**, a clean, unambiguous product spec ready to hand to `/plan` or any other implementation tool
 
-## Plugin structure
-
-```
-claude-refine/
-├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
-├── hooks/
-│   └── hooks.json
-├── skills/
-│   ├── refine/
-│   │   └── SKILL.md
-│   └── -internal-post-draft/
-│       └── SKILL.md
-└── README.md
-```
-
 ## Inspiration
 
 - [Structured-Prompt-Driven Development (SPDD)](https://martinfowler.com/articles/structured-prompt-driven/)
 - [github/spec-kit](https://github.com/github/spec-kit)
 - [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec/)
 
-## Editing guidance
+---
+
+# Editing guidance
+
+Constraints:
 
 - Most changes are prompt-engineering on `skills/refine/SKILL.md`. Treat the description, phase rules, output template, and quality checklist as the four load-bearing parts — do not loosen the constraints (e.g., the 8-question cap, the `AskUserQuestion`-only Q&A rule, the "observations not prescriptions" rule for Codebase Context) without explicit reason.
 - Keep the marketplace name and the plugin name (both `claude-refine` in `marketplace.json`) stable — renaming either breaks every existing user's `/plugin install claude-refine@claude-refine` and forces them to re-add the marketplace.
@@ -74,7 +61,7 @@ claude-refine/
 - Questions are asked via the native `AskUserQuestion` tool. ≤4 markers → one round; 5–8 markers → two rounds (max). Never the manual lettered-option chat format.
 - Once `/refine` finishes and `.claude-refine/.draft-requirement.md` is written (mtime within 60 seconds), a `Stop` hook injects a follow-up instruction that invokes the `claude-refine:-internal-post-draft` skill. No sentinel files, no stale-flag risk if the user interrupts mid-refinement.
 
-Strict workflow:
+Workflow:
 
 - **Phase 0 — Codebase scan**: targeted `Glob`/`Grep` based on 3-5 extracted concepts; reads signatures only, never full implementations. Silently skipped (and the output section omitted) if no relevant code exists.
 - **Phase 1 — Gap analysis**: scores 6 fixed taxonomy categories (Problem & Goal, Target User, Core Functionality, Scope Boundaries, Success Criteria, Edge Cases & Constraints) as Clear/Partial/Missing, then emits up to **8** `[NEEDS CLARIFICATION]` markers prioritized Scope > Target User > Success Criteria > Edge Cases. Low-impact gaps must become Assumptions, not questions.
