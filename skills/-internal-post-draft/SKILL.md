@@ -25,7 +25,7 @@ This skill runs after `/refine` completes. It promotes the ephemeral draft into 
 
 5. **Write the final file.** Write the draft's full content verbatim to `$PROJECT_DIR/.claude-refine/<final-filename>`. No edits, no reformatting, no added sections.
 
-6. **Leave the draft in place.** Do not delete `.draft-requirement.md` — the next `/refine` run overwrites it.
+6. **Remove the draft.** Delete `$PROJECT_DIR/.claude-refine/.draft-requirement.md` once the final file is written. The draft is ephemeral; the dated file is the real artifact, and leaving the draft causes the Stop hook to re-trigger this skill in a loop.
 
 ## Confirm to the user
 

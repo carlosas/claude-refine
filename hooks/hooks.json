@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=\"$CLAUDE_PROJECT_DIR/.claude-refine/.draft-requirement.md\"; if [ -f \"$f\" ]; then m=$(stat -f %m \"$f\" 2>/dev/null || stat -c %Y \"$f\"); if [ $(($(date +%s) - m)) -lt 60 ]; then printf '{\"decision\":\"block\",\"reason\":\"/refine has finished. Now invoke the claude-refine:-internal-post-draft skill on the produced .refined-draft.md.\"}'; fi; fi"
+            "command": "f=\"$CLAUDE_PROJECT_DIR/.claude-refine/.draft-requirement.md\"; if [ -f \"$f\" ]; then m=$(stat -f %m \"$f\" 2>/dev/null || stat -c %Y \"$f\"); if [ $(($(date +%s) - m)) -lt 60 ]; then printf '{\"decision\":\"block\",\"reason\":\"/refine has finished. Now invoke the claude-refine:-internal-post-draft skill on the produced .draft-requirement.md.\"}'; fi; fi"
           }
         ]
       }
