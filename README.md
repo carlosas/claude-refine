@@ -6,19 +6,15 @@ A Claude Code plugin (`claude-refine`) that converts a rough feature idea into a
 
 ```bash
 /plugin marketplace add carlosas/claude-refine
+```
+```bash
 /plugin install claude-refine@claude-refine
 ```
 
 ## Usage
 
 ```
-/refine Add a customer search endpoint to the agent API
-```
-
-Or just describe what you want to build and the skill will trigger automatically:
-
-```
-I want to add notifications when a customer is authenticated
+/refine Add a customer search endpoint to the API
 ```
 
 ## Output
