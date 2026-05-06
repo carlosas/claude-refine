@@ -1,6 +1,6 @@
 {
   "name": "claude-refine",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Claude Code plugin that provides the /refine command for refining feature requests from a product perspective, with codebase-aware context scanning.",
   "author": {
     "name": "carlosas",

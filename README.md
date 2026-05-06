@@ -6,7 +6,7 @@ A Claude Code plugin (`claude-refine`) that converts a rough feature idea into a
 
 ```bash
 /plugin marketplace add carlosas/claude-refine
-/plugin install refine@claude-refine
+/plugin install claude-refine@claude-refine
 ```
 
 ## Usage
@@ -85,7 +85,7 @@ claude-refine/
 ## Editing guidance
 
 - Most changes are prompt-engineering on `skills/refine/SKILL.md`. Treat the description, phase rules, output template, and quality checklist as the four load-bearing parts — do not loosen the constraints (e.g., the 8-question cap, the `AskUserQuestion`-only Q&A rule, the "observations not prescriptions" rule for Codebase Context) without explicit reason.
-- Keep the marketplace name (`claude-refine` in `marketplace.json`) and plugin name (`refine` in the marketplace's `plugins[]` entry) stable — renaming either breaks every existing user's `/plugin install refine@claude-refine` and forces them to re-add the marketplace.
+- Keep the marketplace name and the plugin name (both `claude-refine` in `marketplace.json`) stable — renaming either breaks every existing user's `/plugin install claude-refine@claude-refine` and forces them to re-add the marketplace.
 - The output file is `.claude-refine/.draft-requirement.md`, fully overwritten each run (no merge, no history). The Stop hook keys off this exact path; renaming it requires updating `hooks/hooks.json` in lockstep.
 - Section order and headings are fixed (Problem Statement → Target User → Core Functionality → Out of Scope → Success Criteria → Codebase Context → Assumptions → Open Questions). Downstream tools like `/plan` consume this structure.
 - Problem/Target User/Core Functionality/Out of Scope/Success Criteria sections must contain **no technology choices or implementation details**. Codebase Context is observations only, never prescriptions. The skill enforces this via a quality checklist that runs before save.
