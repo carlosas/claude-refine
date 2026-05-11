@@ -17,7 +17,14 @@ for f in "$HOME/.claude/plans"/*.md; do
 done
 [ -z "$plan_file" ] && exit 0
 
-refs=$(grep -oE '\.claude-refine/[A-Za-z0-9._-]+\.md' "$plan_file" 2>/dev/null | sort -u)
+refs=$(
+  grep -oE '\.claude-refine/[A-Za-z0-9._-]+\.md' "$plan_file" 2>/dev/null \
+    | grep -v '/\.draft-requirement\.md$' \
+    | sort -u \
+    | while IFS= read -r r; do
+        [ -f "$CLAUDE_PROJECT_DIR/$r" ] && printf '%s\n' "$r"
+      done
+)
 
 [ -z "$refs" ] && exit 0
 
