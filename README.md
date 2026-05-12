@@ -19,10 +19,10 @@ Fresh refinement:
 /refine Add a customer search endpoint to the API
 ```
 
-Retrofit an existing spec with additional requirements (`@<slug>` resolves against `.claude-refine/<YYYYMMDDHHMM>-<slug>.md`; unique-prefix match works too):
+Update an existing spec with additional requirements (`@<slug>` resolves against `.claude-refine/<YYYYMMDDHHMM>-<slug>.md`; unique-prefix match works too):
 
 ```
-/refine @customer-search Also allow filtering by tier
+/refine @customer-search also allow filtering by tier
 ```
 
 ## Output
