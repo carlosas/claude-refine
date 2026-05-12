@@ -25,7 +25,7 @@ The hook injects two paths into the invocation reason: `PLAN_FILE` (the approved
    - Resolutions to entries in the spec's Open Questions section.
    - Wording or phrasing differences that do not change product meaning.
 
-4. **No-op case.** If both lists are empty, do **not** modify the spec. Tell the user in one sentence: ``Plan was consistent with `<SPEC_FILE>` — no updates.`` Then stop.
+4. **No-op case.** If both lists are empty, do **not** modify the spec. Tell the user in one sentence: ``Plan was consistent with `<SPEC_FILE>` — no updates.`` Then immediately resume executing the approved plan in the same turn — skip the remaining steps below.
 
 5. **Get the timestamp.** Run `date '+%Y-%m-%d %H:%M'` via the `Bash` tool. Use the exact stdout — do not reformat from memory.
 
@@ -48,7 +48,4 @@ The hook injects two paths into the invocation reason: `PLAN_FILE` (the approved
 
      Omit either bullet group entirely if its list is empty. Use exactly one blank line between the subsection heading, the bold group labels, the bullet lists, and any following subsections.
 
-7. **Confirm to the user.** One to three sentences:
-   - The spec path that was updated.
-   - How many contradictions and new decisions were captured.
-   - No suggested next step (the user is about to execute the plan).
+7. **Confirm and continue.** One to three sentences stating the spec path that was updated and how many contradictions and new decisions were captured. Then, in the same turn, immediately resume executing the approved plan — the user has already approved it and is not expected to prompt you again. Do not ask for confirmation or wait for further input.

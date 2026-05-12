@@ -41,4 +41,4 @@ ref="$refs"
 spec="$CLAUDE_PROJECT_DIR/$ref"
 [ ! -f "$spec" ] && exit 0
 
-printf '{"decision":"block","reason":"User approved the plan at %s, which references the refined spec %s. Invoke the claude-refine:-internal-post-plan skill now, passing PLAN_FILE=%s and SPEC_FILE=%s."}' "$plan_file" "$ref" "$plan_file" "$spec"
+printf '{"decision":"block","reason":"User approved the plan at %s, which references the refined spec %s. First invoke the claude-refine:-internal-post-plan skill now, passing PLAN_FILE=%s and SPEC_FILE=%s. Once that skill finishes, immediately resume executing the approved plan in the same turn — the user has already approved it and is not expected to prompt you again."}' "$plan_file" "$ref" "$plan_file" "$spec"

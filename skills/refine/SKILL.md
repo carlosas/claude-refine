@@ -25,11 +25,11 @@ You work in four phases:
 
 ## Phase 0: Mode Detection
 
-Inspect the first whitespace-delimited token of the user's `/refine` argument.
+Inspect the user's `/refine` argument.
 
-**Does not start with `@`** → `mode = fresh`. Skip directly to Phase 1.
+**Does not reference an existing `.claude-refine/` file** → `mode = fresh`. Skip directly to Phase 1.
 
-**Starts with `@`** → enter retrofit selection:
+**Explicitly references an existing `.claude-refine/` file** → enter retrofit selection:
 
 1. Strip the leading `@`. The remaining string is the requested slug (may be empty if the user typed just `@`).
 2. List `$CLAUDE_PROJECT_DIR/.claude-refine/*.md`, excluding `.draft-requirement.md` and any dotfile. For each filename, derive the indexed slug:
@@ -265,14 +265,9 @@ If any item fails, fix the output before saving.
 
 ### Fresh mode
 
-Confirm to the user:
-- `.claude-refine/.draft-requirement.md` has been written
-- One sentence summarizing the refined feature
-- Suggest next step: "Run `/plan` (or your implementation tool of choice) using `.claude-refine/.draft-requirement.md` as input."
+- Provide to the user three to ten sentences summarizing the refined feature
 
 ### Retrofit mode
 
-Confirm to the user:
-- The path of the updated spec
-- One sentence summarizing the new input that was captured
-- **Re-plan reminder**: if the target file (as read in Step 1) already contained a `## Updates After Planning` section, add: "This spec was previously planned. Re-run `/plan` to incorporate the new additions, then implement them." If `## Updates After Planning` is absent, omit the reminder — the user can run `/plan` for the first time at their own pace.
+- Provide to the user one to five sentences summarizing the new input that was captured
+- **Re-plan reminder**: if the target file (as read in Step 1) already contained a `## Updates After Planning` section, add: "This spec was previously planned. Re-run `/plan` to incorporate the new additions and implement them." If `## Updates After Planning` is absent, suggest next step: "Run `/plan` (or another implementation tool) using `@.claude-refine/<final-filename>` as input."
