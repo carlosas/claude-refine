@@ -16,13 +16,13 @@ A Claude Code plugin that converts a rough feature idea into a refined product s
 Fresh refinement:
 
 ```
-/refine Add a customer search endpoint to the API
+/refine Add a customer search feature
 ```
 
 Update an existing spec with additional requirements (`@<slug>` resolves against `.claude-refine/<YYYYMMDDHHMM>-<slug>.md`; unique-prefix match works too):
 
 ```
-/refine @customer-search also allow filtering by tier
+/refine @customer-search also allow filtering by customer tier
 ```
 
 ## Output
