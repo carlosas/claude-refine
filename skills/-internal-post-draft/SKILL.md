@@ -31,4 +31,4 @@ This skill runs after `/refine` completes. It promotes the ephemeral draft into 
 
 - One to five sentences summarizing the refined feature.
 - The path of the final file written.
-- Suggest next step: "Run `/plan` (or another implementation tool) using `.claude-refine/<final-filename>` as input."
+- Suggest next step: "Run `/plan` (or another implementation tool) using `@.claude-refine/<final-filename>` as input."
